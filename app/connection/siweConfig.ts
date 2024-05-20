@@ -7,19 +7,19 @@ import type {
   SIWECreateMessageArgs,
 } from "@web3modal/siwe";
 import { createSIWEConfig } from "@web3modal/siwe";
+import { SIWEMessageArgs } from "@web3modal/siwe/dist/types/core/utils/TypeUtils";
 
 export const siweConfig = createSIWEConfig({
-  createMessage: ({ nonce, address, chainId }: SIWECreateMessageArgs) =>
-    new SiweMessage({
-      version: "1",
-      domain: window.location.host,
-      uri: window.location.origin,
-      address,
-      chainId,
-      nonce,
-      // Human-readable ASCII assertion that the user will sign, and it must not contain `\n`.
-      statement: "Sign in With Ethereum.",
-    }).prepareMessage(),
+  createMessage: ({ nonce, address, chainId }: SIWECreateMessageArgs) => new SiweMessage({
+    version: "1",
+    domain: window.location.host,
+    uri: window.location.origin,
+    address,
+    chainId,
+    nonce,
+    // Human-readable ASCII assertion that the user will sign, and it must not contain `\n`.
+    statement: "Sign in With Ethereum.",
+  }).prepareMessage(),
   getNonce: async () => {
     const nonce = await getCsrfToken();
     if (!nonce) {
@@ -54,4 +54,7 @@ export const siweConfig = createSIWEConfig({
       return false;
     }
   },
+  getMessageParams: function (): Promise<SIWEMessageArgs> {
+    throw new Error("Function not implemented.");
+  }
 });
